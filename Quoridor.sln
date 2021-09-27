@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quoridor.Models", "Quoridor.Model\Quoridor.Models.csproj", "{7071411D-252E-4DC3-9EC3-1E5187D9CB31}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7071411D-252E-4DC3-9EC3-1E5187D9CB31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7071411D-252E-4DC3-9EC3-1E5187D9CB31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7071411D-252E-4DC3-9EC3-1E5187D9CB31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7071411D-252E-4DC3-9EC3-1E5187D9CB31}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FE4564E8-238F-4138-AE9D-A5E7359777F8}
+	EndGlobalSection
+EndGlobal
