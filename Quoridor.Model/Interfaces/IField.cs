@@ -1,6 +1,8 @@
-﻿namespace Quoridor.Models.Interfaces
+﻿using AStarPathfinding;
+
+namespace Quoridor.Models.Interfaces
 {
-    public interface IField
+    public interface IField : IGraph<IFieldNode>
     {
         int Height { get; }
         int Width { get; }

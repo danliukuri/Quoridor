@@ -1,5 +1,6 @@
 ﻿using Quoridor.Models.Interfaces;
 using System;
+using System.Linq;
 
 namespace Quoridor.Models
 {
@@ -34,7 +35,7 @@ namespace Quoridor.Models
             cells = new IFieldNode[Width, Height];
             for (int i = 0; i < Width; i++)
                 for (int j = 0; j < Height; j++)
-                    cells[i, j] = new FieldNode();
+                    cells[i, j] = new FieldNode(i, j);
         }
         void ConnectNodes()
         {
@@ -58,5 +59,8 @@ namespace Quoridor.Models
             CreateNodes();
             ConnectNodes();
         }
+
+        public IFieldNode[] GetWalkableAdjacentNodes(IFieldNode current) =>
+            current.Neighbors.GetAll().Where(adjacentNode => current.IsItPossibleMoveTo(adjacentNode)).ToArray();
     }
 }

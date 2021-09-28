@@ -1,6 +1,8 @@
-﻿namespace Quoridor.Models.Interfaces
+﻿using AStarPathfinding;
+
+namespace Quoridor.Models.Interfaces
 {
-    public interface IPlayer : INamed
+    public interface IPlayer : IPurposeful<IFieldNode>, INamed
     {
         IFieldNode Position { get; set; }
 

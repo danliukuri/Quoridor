@@ -1,4 +1,5 @@
-﻿using Quoridor.Models.Interfaces;
+﻿using AStarPathfinding;
+using Quoridor.Models.Interfaces;
 using System;
 
 namespace Quoridor.Models
@@ -8,6 +9,7 @@ namespace Quoridor.Models
         public string Name { get; private set; }
         public char Mark { get; private set; }
         public IFieldNode Position { get; set; }
+        public (AStar.IsGoal<IFieldNode>, AStar.ComputeHScore<IFieldNode>) Goal { get; set; }
         public int NumberOfWalls { get; set; }
   
         public Player(string name, char mark)

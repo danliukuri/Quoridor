@@ -63,14 +63,27 @@ namespace Quoridor.Models
             if (Players.Length == 2)
             {
                 Players[0].Position = Field.GetCell(Field.Width / 2, Field.Height - 1);
+                Players[0].Goal = ((current) => current.Y == 0, (current) => Math.Abs(0 - current.Y));
+
                 Players[1].Position = Field.GetCell(Field.Width / 2, 0);
+                Players[1].Goal = ((current) => current.Y == Field.Height - 1,
+                    (current) => Math.Abs(Field.Height - 1 - current.Y));
             }
             if (Players.Length == 4)
             {
                 Players[0].Position = Field.GetCell(Field.Width / 2, Field.Height - 1);
+                Players[0].Goal = ((current) => current.Y == 0, (current) => Math.Abs(0 - current.Y));
+
                 Players[1].Position = Field.GetCell(0, Field.Height / 2);
+                Players[1].Goal = ((current) => current.X == Field.Width - 1,
+                    (current) => Math.Abs(Field.Width - 1 - current.X));
+
                 Players[2].Position = Field.GetCell(Field.Width / 2, 0);
+                Players[2].Goal = ((current) => current.Y == Field.Height - 1,
+                    (current) => Math.Abs(Field.Height - 1 - current.Y));
+
                 Players[3].Position = Field.GetCell(Field.Width - 1, Field.Height / 2);
+                Players[3].Goal = ((current) => current.X == 0, (current) => Math.Abs(0 - current.X));
             }
             for (int i = 0; i < Players.Length; i++)
             {
