@@ -185,6 +185,7 @@ namespace Quoridor.Console.App
                                     int w = int.Parse(splitCommand[3]) - 1;
                                     int h = int.Parse(splitCommand[4]) - 1;
                                     playerController.PlaceWall(direction, w, h);
+                                    isPlayerTurn = false;
                                 }
                                 break;
                             case "quit":
