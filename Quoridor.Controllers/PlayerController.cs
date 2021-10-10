@@ -1,7 +1,9 @@
 ﻿using AStarPathfinding;
+using Quoridor.ErrorHandling;
 using Quoridor.Models;
 using Quoridor.Models.Interfaces;
 using System;
+
 
 namespace Quoridor.Controllers
 {
@@ -20,18 +22,18 @@ namespace Quoridor.Controllers
             quoridorModel = quoridorController.QuoridorModel;
         }
 
-        public virtual void MakePlayerMove(Direction direction)
+        public virtual EitherLeftOrVoid<ValidationError> TryToMakePlayerMove(Direction direction)
         {
             IFieldNode playerCell = quoridorModel.CurrentPlayer.Position;
             IFieldNode adjacentCell = playerCell.Neighbors.Get(direction);
             if (adjacentCell is null)
             {
-                throw new NullReferenceException($"Can't move player {direction.ToString().ToLower()} - " +
+                return new ValidationError($"Can't move player {direction.ToString().ToLower()} - " +
                     $"cell is null");
             }
             if (playerCell.Walls.Get(direction) != null)
             {
-                throw new NullReferenceException($"Can't move player {direction.ToString().ToLower()} - " +
+                return new ValidationError($"Can't move player {direction.ToString().ToLower()} - " +
                     $"there is a wall in the way");
             }
 
@@ -43,7 +45,10 @@ namespace Quoridor.Controllers
                 IFieldNode adjacentPlayerCell = players[i].Position;
                 if (adjacentCell == adjacentPlayerCell)
                 {
-                    MakePlayerMoveThroughTheAdjacentPlayer(adjacentPlayerCell, direction);
+                    EitherLeftOrVoid<ValidationError> result =
+                        TryToMakePlayerMoveThroughTheAdjacentPlayer(adjacentPlayerCell, direction);
+                    if (result.IsLeft)
+                        return result;
                     isPlayerMoved = true;
                 }
             }
@@ -53,19 +58,21 @@ namespace Quoridor.Controllers
                 currentPlayer.Position = adjacentCell;
             quoridorController.CheckIsGameEnd(currentPlayer);
             quoridorModel.SwitchPlayer();
+            return new EitherLeftOrVoid<ValidationError>();
         }
-        public virtual void MakePlayerMove(Direction direction, Direction directionFromAnotherPlayer)
+        public virtual EitherLeftOrVoid<ValidationError> TryToMakePlayerMove(
+            Direction direction, Direction directionFromAnotherPlayer)
         {
             IFieldNode playerCell = quoridorModel.CurrentPlayer.Position;
             IFieldNode adjacentCell = playerCell.Neighbors.Get(direction);
             if (adjacentCell is null)
             {
-                throw new NullReferenceException($"Can't move player {direction.ToString().ToLower()} - " +
+                return new ValidationError($"Can't move player {direction.ToString().ToLower()} - " +
                     $"cell is null");
             }
             if (playerCell.Walls.Get(direction) != null)
             {
-                throw new NullReferenceException($"Can't move player {direction.ToString().ToLower()} - " +
+                return new ValidationError($"Can't move player {direction.ToString().ToLower()} - " +
                     $"there is a wall in the way");
             }
 
@@ -77,71 +84,87 @@ namespace Quoridor.Controllers
                 IFieldNode adjacentPlayerCell = players[i].Position;
                 if (adjacentCell == adjacentPlayerCell)
                 {
-                    MakePlayerMoveToTheSideThroughTheAdjacentPlayer(adjacentPlayerCell, direction, directionFromAnotherPlayer);
+                    EitherLeftOrVoid<ValidationError> result = TryToMakePlayerMoveToTheSideThroughTheAdjacentPlayer(
+                        adjacentPlayerCell, direction, directionFromAnotherPlayer);
+                    if (result.IsLeft)
+                        return result;
                     isPlayerMoved = true;
                 }
             }
 
             if (!isPlayerMoved)
             {
-                throw new InvalidOperationException($"Can't move to the side through the player - " +
+                return new ValidationError($"Can't move to the side through the player - " +
                     $"there is no other player to the {direction.ToString().ToLower()} of the player's " +
                     $"current position ({playerCell.X + 1},{playerCell.Y + 1})");
             }
             quoridorController.CheckIsGameEnd(quoridorModel.CurrentPlayer);
             quoridorModel.SwitchPlayer();
+            return new EitherLeftOrVoid<ValidationError>();
         }
-        void MakePlayerMoveThroughTheAdjacentPlayer(IFieldNode adjacentPlayerCell, Direction direction)
+        EitherLeftOrVoid<ValidationError> TryToMakePlayerMoveThroughTheAdjacentPlayer(
+            IFieldNode adjacentPlayerCell, Direction direction)
         {
+            if (adjacentPlayerCell is null)
+            {
+                throw new ArgumentNullException(nameof(adjacentPlayerCell));
+            }
             // Move through the player
             IFieldNode targetCell = adjacentPlayerCell.Neighbors.Get(direction);
 
             if (targetCell is null)
             {
-                throw new InvalidOperationException($"Can't go through the player - the cell" +
+                return new ValidationError($"Can't go through the player - the cell" +
                     $" to the {direction.ToString().ToLower()} of the player's cell" +
                     $"({adjacentPlayerCell.X + 1},{adjacentPlayerCell.Y + 1}) is null");
             }
             if (adjacentPlayerCell.Walls.Get(direction) != null)
             {
-                throw new InvalidOperationException($"Can't go through the player - the cell" +
+                return new ValidationError($"Can't go through the player - the cell" +
                     $"({adjacentPlayerCell.X + 1},{adjacentPlayerCell.Y + 1}) has a wall in the " +
                     $"{direction.ToString().ToLower()} direction");
             }
 
             quoridorModel.CurrentPlayer.Position = targetCell;
+            return new EitherLeftOrVoid<ValidationError>();
         }
-        void MakePlayerMoveToTheSideThroughTheAdjacentPlayer(IFieldNode adjacentPlayerCell,
-            Direction direction, Direction directionFromAdjacentPlayer)
+        EitherLeftOrVoid<ValidationError> TryToMakePlayerMoveToTheSideThroughTheAdjacentPlayer(
+            IFieldNode adjacentPlayerCell, Direction direction, Direction directionFromAdjacentPlayer)
         {
+            if (adjacentPlayerCell is null)
+            {
+                throw new ArgumentNullException(nameof(adjacentPlayerCell));
+            }
             // Move to the side through the player
             IFieldNode targetCell = adjacentPlayerCell.Neighbors.Get(directionFromAdjacentPlayer);
 
             if (targetCell is null)
             {
-                throw new InvalidOperationException($"Can't move to the side through the player - the cell" +
+                return new ValidationError($"Can't move to the side through the player - the cell" +
                     $" to the {directionFromAdjacentPlayer.ToString().ToLower()} of the player's cell" +
                     $"({adjacentPlayerCell.X + 1},{adjacentPlayerCell.Y + 1}) is null");
             }
             if (adjacentPlayerCell.Walls.Get(direction) is null && adjacentPlayerCell.Neighbors.Get(direction) != null)
             {
-                throw new InvalidOperationException($"Can't move to the side through the player - the cell" +
+                return new ValidationError($"Can't move to the side through the player - the cell" +
                     $"({adjacentPlayerCell.X + 1},{adjacentPlayerCell.Y + 1}) has no wall in the " +
                     $"{direction.ToString().ToLower()} direction and you need to go through it");
             }
             if (adjacentPlayerCell.Walls.Get(directionFromAdjacentPlayer) != null)
             {
-                throw new InvalidOperationException($"Can't move to the side through the player - the cell" +
+                return new ValidationError($"Can't move to the side through the player - the cell" +
                     $"({adjacentPlayerCell.X + 1},{adjacentPlayerCell.Y + 1}) has a wall in the " +
                     $"{directionFromAdjacentPlayer.ToString().ToLower()} direction");
             }
 
             quoridorModel.CurrentPlayer.Position = targetCell;
+            return new EitherLeftOrVoid<ValidationError>();
         }
 
-        public virtual void PlaceWall(Direction direction, int widthCoordinate, int heightCoordinate)
+        public virtual EitherLeftOrVoid<ValidationError> TryToPlaceWall(Direction direction,
+            int widthCoordinate, int heightCoordinate)
         {
-            if(widthCoordinate < 0 || widthCoordinate >= quoridorModel.Field.Width)
+            if (widthCoordinate < 0 || widthCoordinate >= quoridorModel.Field.Width)
             {
                 throw new ArgumentOutOfRangeException(nameof(widthCoordinate));
             }
@@ -154,7 +177,7 @@ namespace Quoridor.Controllers
             // Check if the current player has walls
             if (currentPlayer.NumberOfWalls <= 0)
             {
-                throw new InvalidOperationException($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
                     $"ward of the cell ({widthCoordinate + 1},{heightCoordinate + 1}) - the current player " +
                     $"({currentPlayer.Name}) has no walls left to place");
             }
@@ -163,30 +186,30 @@ namespace Quoridor.Controllers
 
             if (cell is null)
             {
-                throw new NullReferenceException($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
                     $"ward of the cell ({widthCoordinate + 1},{heightCoordinate + 1}) - cell is null");
             }
             if (cell.Walls.Get(direction) != null)
             {
-                throw new InvalidOperationException($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
                     $"ward of the cell ({widthCoordinate + 1},{heightCoordinate + 1}) - there is already a wall there");
             }
-
+            
             Direction adjacentDirection = (direction == Direction.Up || direction == Direction.Down) ? Direction.Right : Direction.Down;
             IFieldNode adjacentCell = cell.Neighbors.Get(adjacentDirection);
 
             // Check neighbors in neighborDirection from selected cell
             if (adjacentCell is null)
             {
-                throw new InvalidOperationException($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
                     $"ward from the cell ({widthCoordinate + 1},{heightCoordinate + 1}) - the cell on the " +
                     $"{adjacentDirection.ToString().ToLower()} is null.\n" +
                     $"The wall is placed in the direction from the selected cell and from the cell to the left of the " +
                     $"selected one or from the cell below the selected one, depending on the direction.");
             }
-            if (adjacentCell.Walls.Get(direction) != null)
+            else if (adjacentCell.Walls.Get(direction) != null)
             {
-                throw new InvalidOperationException($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
                     $"ward from the cell ({widthCoordinate + 1},{heightCoordinate + 1}) - the cell to the " +
                     $"{adjacentDirection.ToString().ToLower()} of the selected already has a wall in the selected " +
                     $"direction ({direction.ToString().ToLower()}).\n" +
@@ -195,15 +218,15 @@ namespace Quoridor.Controllers
             }
 
             // Check neighbors in direction from selected cell
-            if (cell.Neighbors.Get(direction) is null)
+            else if (cell.Neighbors.Get(direction) is null)
             {
-                throw new NullReferenceException($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
                      $"ward of the cell ({widthCoordinate + 1},{heightCoordinate + 1}) - cell to the " +
                      $"{direction.ToString().ToLower()} of the selected is null");
             }
-            if (adjacentCell.Neighbors.Get(direction) is null)
+            else if (adjacentCell.Neighbors.Get(direction) is null)
             {
-                throw new InvalidOperationException($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
                     $"ward from the cell ({widthCoordinate + 1},{heightCoordinate + 1}) - cell to the " +
                     $"{direction.ToString().ToLower()} of the cell on the {adjacentDirection.ToString().ToLower()} is null.\n" +
                     $"The wall is placed in the direction from the selected cell and from the cell to the left of the " +
@@ -211,15 +234,16 @@ namespace Quoridor.Controllers
             }
 
             // Checking if another wall is in the way
-            if (cell.Walls.Get(adjacentDirection) != null && cell.Neighbors.Get(direction)?.Walls.Get(adjacentDirection) != null)
+            else if (cell.Walls.Get(adjacentDirection) != null && 
+                cell.Neighbors.Get(direction)?.Walls.Get(adjacentDirection) != null)
             {
                 // Checking maybe this is not a wall but two ends of different walls
                 if (cell.Neighbors.Get(GetTheOppositeDirection(direction))?.Walls.Get(adjacentDirection) == null ||
                     cell.Neighbors.Get(direction)?.Neighbors.Get(direction)?.Walls.Get(adjacentDirection) == null)
-                    throw new InvalidOperationException($"Can't place a wall to the {direction.ToString().ToLower()} of the cell " +
+                    return new ValidationError($"Can't place a wall to the {direction.ToString().ToLower()} of the cell " +
                         $"({widthCoordinate + 1},{heightCoordinate + 1}) - another wall interferes");
             }
-
+                
             Wall wall = new Wall();
             cell.Neighbors.Get(direction).Walls.Set(GetTheOppositeDirection(direction), wall);
             cell.Walls.Set(direction, wall);
@@ -235,17 +259,21 @@ namespace Quoridor.Controllers
 
                 if (finded is null)
                 {
-                    RemoveWall(cell, direction);
-                    throw new NullReferenceException($"Can't place a wall to the {direction.ToString().ToLower()}" +
+                    EitherLeftOrVoid<ValidationError> result = TryToRemoveWall(cell, direction);
+                    if (result.IsLeft)
+                        return result;
+                    return new ValidationError($"Can't place a wall to the {direction.ToString().ToLower()}" +
                         $" of the cell ({widthCoordinate + 1},{heightCoordinate + 1}) - the player {players[i].Mark}" +
                         $" cannot reach the finish line");
                 }
             }
-
+            
             currentPlayer.NumberOfWalls--;
             quoridorModel.SwitchPlayer();
+
+            return new EitherLeftOrVoid<ValidationError>();
         }
-        void RemoveWall(IFieldNode cell, Direction direction)
+        EitherLeftOrVoid<ValidationError> TryToRemoveWall(IFieldNode cell, Direction direction)
         {
             if (cell is null)
             {
@@ -254,7 +282,7 @@ namespace Quoridor.Controllers
             }
             if (cell.Walls.Get(direction) is null)
             {
-                throw new InvalidOperationException($"Can't remove the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't remove the wall in the direction {direction.ToString().ToLower()}" +
                     $"ward of the cell ({cell.X + 1},{cell.Y + 1}) - there is no wall there");
             }
 
@@ -263,7 +291,7 @@ namespace Quoridor.Controllers
 
             if (adjacentCell is null)
             {
-                throw new InvalidOperationException($"Can't remove the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't remove the wall in the direction {direction.ToString().ToLower()}" +
                     $"ward from the cell ({cell.X + 1},{cell.Y + 1}) - the cell on the " +
                     $"{adjacentDirection.ToString().ToLower()} is null.\n" +
                     $"The wall is placed in the direction from the selected cell and from the cell to the left of the selected " +
@@ -271,7 +299,7 @@ namespace Quoridor.Controllers
             }
             if (adjacentCell.Walls.Get(direction) is null)
             {
-                throw new InvalidOperationException($"Can't remove the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't remove the wall in the direction {direction.ToString().ToLower()}" +
                     $"ward from the cell ({cell.X + 1},{cell.Y + 1}) - the cell to the " +
                     $"{adjacentDirection.ToString().ToLower()} of the selected has not a wall in the selected " +
                     $"direction ({direction.ToString().ToLower()}).\n" +
@@ -282,13 +310,13 @@ namespace Quoridor.Controllers
             // Check neighbors in direction from selected cell
             if (cell.Neighbors.Get(direction) is null)
             {
-                throw new NullReferenceException($"Can't remove the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't remove the wall in the direction {direction.ToString().ToLower()}" +
                      $"ward of the cell ({cell.X + 1},{cell.Y + 1}) - cell to the " +
                      $"{direction.ToString().ToLower()} of the selected is null");
             }
             if (adjacentCell.Neighbors.Get(direction) is null)
             {
-                throw new InvalidOperationException($"Can't remove the wall in the direction {direction.ToString().ToLower()}" +
+                return new ValidationError($"Can't remove the wall in the direction {direction.ToString().ToLower()}" +
                     $"ward from the cell ({cell.X + 1},{cell.Y + 1}) - cell to the " +
                     $"{direction.ToString().ToLower()} of the cell on the {adjacentDirection.ToString().ToLower()} is null.\n" +
                     $"The wall is placed in the direction from the selected cell and from the cell to the left of the " +
@@ -299,6 +327,8 @@ namespace Quoridor.Controllers
             cell.Walls.Set(direction, null);
             adjacentCell.Neighbors.Get(direction).Walls.Set(GetTheOppositeDirection(direction), null);
             adjacentCell.Walls.Set(direction, null);
+
+            return new EitherLeftOrVoid<ValidationError>();
         }
 
         Direction GetTheOppositeDirection(Direction direction) => direction switch

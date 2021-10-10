@@ -1,4 +1,5 @@
-﻿using Quoridor.Models;
+﻿using Quoridor.ErrorHandling;
+using Quoridor.Models;
 using Quoridor.Models.Interfaces;
 using System;
 
@@ -20,24 +21,30 @@ namespace Quoridor.Controllers
                 PlayerWon?.Invoke(winner);
         }
 
-        public override void MakePlayerMove(Direction direction)
+        public override EitherLeftOrVoid<ValidationError> TryToMakePlayerMove(Direction direction)
         {
-            base.MakePlayerMove(direction);
+            EitherLeftOrVoid<ValidationError> result = base.TryToMakePlayerMove(direction);
             FieldUpdated?.Invoke(quoridorModel.Field);
             CheckIsThereWinner();
+            return result;
         }
-        public override void MakePlayerMove(Direction direction, Direction directionFromAnotherPlayer)
+        public override EitherLeftOrVoid<ValidationError> TryToMakePlayerMove(Direction direction, Direction directionFromAnotherPlayer)
         {
-            base.MakePlayerMove(direction, directionFromAnotherPlayer);
+            EitherLeftOrVoid<ValidationError> result = 
+                base.TryToMakePlayerMove(direction, directionFromAnotherPlayer);
             FieldUpdated?.Invoke(quoridorModel.Field);
             CheckIsThereWinner();
+            return result;
         }
 
-        public override void PlaceWall(Direction direction, int widthCoordinate, int heightCoordinate)
+        public override EitherLeftOrVoid<ValidationError> TryToPlaceWall(Direction direction,
+            int widthCoordinate, int heightCoordinate)
         {
-            base.PlaceWall(direction, widthCoordinate, heightCoordinate);
+            EitherLeftOrVoid<ValidationError> result = 
+                base.TryToPlaceWall(direction, widthCoordinate, heightCoordinate);
             FieldUpdated?.Invoke(quoridorModel.Field);
             WallPlaced?.Invoke(quoridorModel.PreviousPlayer);
+            return result;
         }
     }
 }

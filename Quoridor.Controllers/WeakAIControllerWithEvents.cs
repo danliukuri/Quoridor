@@ -1,4 +1,4 @@
-﻿using Quoridor.Models;
+﻿using Quoridor.ErrorHandling;
 using Quoridor.Models.Interfaces;
 using System;
 
@@ -19,18 +19,20 @@ namespace Quoridor.Controllers
                 AIWon?.Invoke(winner);
         }
 
-        protected override void MakePlayerMove()
+        protected override EitherLeftOrVoid<ValidationError> TryToMakePlayerMove()
         {
-            base.MakePlayerMove();
+            EitherLeftOrVoid<ValidationError> result = base.TryToMakePlayerMove();
             FieldUpdated?.Invoke(quoridorModel.Field);
             CheckIsThereWinner();
+            return result;
         }
 
-        protected override void PlaceWall()
+        protected override EitherLeftOrVoid<ValidationError> TryToPlaceWall()
         {
-            base.PlaceWall();
+            EitherLeftOrVoid<ValidationError> result = base.TryToPlaceWall();
             FieldUpdated?.Invoke(quoridorModel.Field);
             WallPlaced?.Invoke(quoridorModel.PreviousPlayer);
+            return result;
         }
     }
 }

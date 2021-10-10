@@ -1,4 +1,5 @@
-﻿using Quoridor.Models;
+﻿using Quoridor.ErrorHandling;
+using Quoridor.Models;
 using System;
 
 namespace Quoridor.Controllers
@@ -21,26 +22,27 @@ namespace Quoridor.Controllers
         }
 
         Direction GetRandomDirection() => (Direction)new Random().Next(0, 4);
-        bool GetRandomBool() => new Random().Next(0, 2) > 0 ? true : false; 
+        bool GetRandomBool() => new Random().Next(0, 2) > 0; 
         
         public virtual void MakeMove()
-        {   
-            if(GetRandomBool())
-                MakePlayerMove();
-            else
-                PlaceWall();
+        {
+            EitherLeftOrVoid<ValidationError> result;
+            do
+            {
+                result = GetRandomBool() ? TryToMakePlayerMove() : TryToPlaceWall();
+            } while (result.IsLeft);
         }
-        protected virtual void MakePlayerMove()
+        protected virtual EitherLeftOrVoid<ValidationError> TryToMakePlayerMove()
         {
             Direction direction = GetRandomDirection();
-            playerController.MakePlayerMove(direction);
+            return playerController.TryToMakePlayerMove(direction);
         }
-        protected virtual void PlaceWall()
+        protected virtual EitherLeftOrVoid<ValidationError> TryToPlaceWall()
         {
             Direction direction = GetRandomDirection();
             int w = new Random().Next(0, quoridorModel.Field.Width);
             int h = new Random().Next(0, quoridorModel.Field.Height);
-            playerController.PlaceWall(direction, w, h);
+            return playerController.TryToPlaceWall(direction, w, h);
         }
     }
 }
