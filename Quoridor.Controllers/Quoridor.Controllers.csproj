@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MinimaxAlgorithm\MinimaxAlgorithm.csproj" />
     <ProjectReference Include="..\Quoridor.Models\Quoridor.Models.csproj" />
   </ItemGroup>
 

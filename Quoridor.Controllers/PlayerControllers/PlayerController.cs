@@ -274,7 +274,7 @@ namespace Quoridor.Controllers.PlayerControllers
 
             return new EitherLeftOrVoid<ValidationError>();
         }
-        EitherLeftOrVoid<ValidationError> TryToRemoveWall(IFieldNode cell, Direction direction)
+        public virtual EitherLeftOrVoid<ValidationError> TryToRemoveWall(IFieldNode cell, Direction direction)
         {
             if (cell is null)
             {
