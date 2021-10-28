@@ -24,11 +24,11 @@ namespace Quoridor.Console.App.PvP.Output
             playerController.WallPlaced += WallPlaced;
             playerController.PlayerWon += PlayerWon;
         }
-        public void ListenTo(WeakAIControllerWithEvents weakAIController)
+        public void ListenTo(WeakAIPlayerControllerWithEvents weakAIPlayerController)
         {
-            weakAIController.FieldUpdated += FieldUpdated;
-            weakAIController.WallPlaced += WallPlaced;
-            weakAIController.AIWon += PlayerWon;
+            weakAIPlayerController.FieldUpdated += FieldUpdated;
+            weakAIPlayerController.WallPlaced += WallPlaced;
+            weakAIPlayerController.AIWon += PlayerWon;
         }
 
         void PlayerWon(INamed player)

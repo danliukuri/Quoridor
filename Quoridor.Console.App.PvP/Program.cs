@@ -43,7 +43,7 @@ namespace Quoridor.Console.App.PvP
                 quoridorPvAIController = new QuoridorControllerWithEvents(quoridorModel);
             }
             PlayerControllerWithEvents playerPvAIController = new PlayerControllerWithEvents(quoridorPvAIController);
-            WeakAIControllerWithEvents weakAIController = new WeakAIControllerWithEvents(quoridorPvAIController);
+            WeakAIPlayerControllerWithEvents weakAIController = new WeakAIPlayerControllerWithEvents(quoridorPvAIController);
             ConsoleOutput outputPvAI = new ConsoleOutput();
             outputPvAI.ListenTo(quoridorPvAIController);
             outputPvAI.ListenTo(playerPvAIController);

@@ -3,14 +3,14 @@ using System;
 
 namespace Quoridor.Controllers.PlayerControllers.AI.Weak
 {
-    public class WeakAIControllerWithEvents : WeakAIController
+    public class WeakAIPlayerControllerWithEvents : WeakAIPlayerController
     {
         public event Action<IField> FieldUpdated;
 
         public event Action<IPlayer> WallPlaced;
 
         public event Action<IPlayer> AIWon;
-        public WeakAIControllerWithEvents(QuoridorController quoridorController) : base(quoridorController) { }
+        public WeakAIPlayerControllerWithEvents(QuoridorController quoridorController) : base(quoridorController) { }
         void CheckIsThereWinner()
         {
             IPlayer winner = quoridorModel.Winner;

@@ -1,7 +1,7 @@
 ﻿using Quoridor.Console.App.PvP.Output;
 using Quoridor.Controllers;
 using Quoridor.Controllers.PlayerControllers;
-using Quoridor.Controllers.PlayerControllers.AI.Weak;
+using Quoridor.Controllers.PlayerControllers.AI;
 using Quoridor.Models.General;
 using Quoridor.Models.General.Either;
 
@@ -11,7 +11,7 @@ namespace Quoridor.Console.App.PvP.Input
     {
         public void StartProcessing(QuoridorController quoridorPvPController, PlayerController playerPvPController,
             QuoridorController quoridorPvAIController, PlayerController playerPvAIController,
-            WeakAIController weakAIController)
+            AIPlayerController aiPlayerController)
         {
             ConsoleOutputForInput.OutputGameTitle();
             bool finishProcessing = false; ;
@@ -33,7 +33,7 @@ namespace Quoridor.Console.App.PvP.Input
                         StartProcessingPvP(quoridorPvPController, playerPvPController);
                         break;
                     case "pvai":
-                        StartProcessingPvAI(quoridorPvAIController, playerPvAIController, weakAIController);
+                        StartProcessingPvAI(quoridorPvAIController, playerPvAIController, aiPlayerController);
                         break;
                     case "quit":
                         finishProcessing = true;
@@ -60,7 +60,7 @@ namespace Quoridor.Console.App.PvP.Input
         }
 
         public void StartProcessingPvAI(QuoridorController quoridorController, PlayerController playerController,
-            WeakAIController weakAIController)
+            AIPlayerController aiPlayerController)
         {
             ConsoleOutputForInput.OutputPvAIModeTitle();
             quoridorController.StartGame();
@@ -80,7 +80,7 @@ namespace Quoridor.Console.App.PvP.Input
                 else
                 {
                     ConsoleOutputForInput.AITurn(quoridorController.QuoridorModel.CurrentPlayer);
-                    weakAIController.MakeMove();
+                    aiPlayerController.MakeMove();
                     isPlayerTurn = true;
                 }
             }

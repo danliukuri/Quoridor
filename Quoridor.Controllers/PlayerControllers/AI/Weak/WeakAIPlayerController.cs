@@ -1,31 +1,17 @@
-﻿using Quoridor.Models;
+﻿using Quoridor.Controllers.UtilityModels;
 using Quoridor.Models.General;
 using Quoridor.Models.General.Either;
 using System;
 
 namespace Quoridor.Controllers.PlayerControllers.AI.Weak
 {
-    public class WeakAIController
+    public class WeakAIPlayerController : AIPlayerController
     {
-        protected QuoridorModel quoridorModel;
-        protected QuoridorController quoridorController;
-        protected PlayerController playerController;
-        public WeakAIController(QuoridorController quoridorController)
-        {
-            if (quoridorController is null)
-            {
-                throw new ArgumentNullException(nameof(quoridorController));
-            }
+        public WeakAIPlayerController(QuoridorController quoridorController) : base(quoridorController) { }
 
-            this.quoridorController = quoridorController;
-            quoridorModel = quoridorController.QuoridorModel;
-            playerController = new PlayerController(quoridorController);
-        }
-
-        Direction GetRandomDirection() => (Direction)new Random().Next(0, 4);
         bool GetRandomBool() => new Random().Next(0, 2) > 0;
 
-        public virtual void MakeMove()
+        public override void MakeMove()
         {
             if (GetRandomBool() && quoridorModel.CurrentPlayer.NumberOfWalls > 0)
                 PlaceWall();
@@ -38,7 +24,7 @@ namespace Quoridor.Controllers.PlayerControllers.AI.Weak
             EitherLeftOrVoid<ValidationError> result;
             do
             {
-                Direction direction = GetRandomDirection();
+                Direction direction = DirectionExtentions.GetRandomDirection();
                 result = playerController.TryToMakePlayerMove(direction);
             } while (result.IsLeft);
         }
@@ -47,7 +33,7 @@ namespace Quoridor.Controllers.PlayerControllers.AI.Weak
             EitherLeftOrVoid<ValidationError> result;
             do
             {
-                Direction direction = GetRandomDirection();
+                Direction direction = DirectionExtentions.GetRandomDirection();
                 int w = new Random().Next(0, quoridorModel.Field.Width);
                 int h = new Random().Next(0, quoridorModel.Field.Height);
                 result = playerController.TryToPlaceWall(direction, w, h);
