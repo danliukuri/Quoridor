@@ -1,4 +1,4 @@
-﻿namespace Quoridor.ErrorHandling
+﻿namespace Quoridor.Models.General
 {
     public class ValidationError
     {

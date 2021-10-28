@@ -1,6 +1,7 @@
 ﻿using AStarPathfinding;
-using Quoridor.ErrorHandling;
 using Quoridor.Models;
+using Quoridor.Models.General;
+using Quoridor.Models.General.Either;
 using Quoridor.Models.Interfaces;
 using System;
 
@@ -13,7 +14,7 @@ namespace Quoridor.Controllers
         protected QuoridorController quoridorController;
         public PlayerController(QuoridorController quoridorController)
         {
-            if(quoridorController is null)
+            if (quoridorController is null)
             {
                 throw new ArgumentNullException(nameof(quoridorController));
             }
@@ -194,7 +195,7 @@ namespace Quoridor.Controllers
                 return new ValidationError($"Can't place the wall in the direction {direction.ToString().ToLower()}" +
                     $"ward of the cell ({widthCoordinate + 1},{heightCoordinate + 1}) - there is already a wall there");
             }
-            
+
             Direction adjacentDirection = (direction == Direction.Up || direction == Direction.Down) ? Direction.Right : Direction.Down;
             IFieldNode adjacentCell = cell.Neighbors.Get(adjacentDirection);
 
@@ -234,7 +235,7 @@ namespace Quoridor.Controllers
             }
 
             // Checking if another wall is in the way
-            else if (cell.Walls.Get(adjacentDirection) != null && 
+            else if (cell.Walls.Get(adjacentDirection) != null &&
                 cell.Neighbors.Get(direction)?.Walls.Get(adjacentDirection) != null)
             {
                 // Checking maybe this is not a wall but two ends of different walls
@@ -243,7 +244,7 @@ namespace Quoridor.Controllers
                     return new ValidationError($"Can't place a wall to the {direction.ToString().ToLower()} of the cell " +
                         $"({widthCoordinate + 1},{heightCoordinate + 1}) - another wall interferes");
             }
-                
+
             Wall wall = new Wall();
             cell.Neighbors.Get(direction).Walls.Set(GetTheOppositeDirection(direction), wall);
             cell.Walls.Set(direction, wall);
@@ -267,7 +268,7 @@ namespace Quoridor.Controllers
                         $" cannot reach the finish line");
                 }
             }
-            
+
             currentPlayer.NumberOfWalls--;
             quoridorModel.SwitchPlayer();
 

@@ -1,5 +1,5 @@
-﻿using Quoridor.ErrorHandling;
-using Quoridor.Models;
+﻿using Quoridor.Models.General;
+using Quoridor.Models.General.Either;
 using Quoridor.Models.Interfaces;
 using System;
 
@@ -30,7 +30,7 @@ namespace Quoridor.Controllers
         }
         public override EitherLeftOrVoid<ValidationError> TryToMakePlayerMove(Direction direction, Direction directionFromAnotherPlayer)
         {
-            EitherLeftOrVoid<ValidationError> result = 
+            EitherLeftOrVoid<ValidationError> result =
                 base.TryToMakePlayerMove(direction, directionFromAnotherPlayer);
             FieldUpdated?.Invoke(quoridorModel.Field);
             CheckIsThereWinner();
@@ -40,7 +40,7 @@ namespace Quoridor.Controllers
         public override EitherLeftOrVoid<ValidationError> TryToPlaceWall(Direction direction,
             int widthCoordinate, int heightCoordinate)
         {
-            EitherLeftOrVoid<ValidationError> result = 
+            EitherLeftOrVoid<ValidationError> result =
                 base.TryToPlaceWall(direction, widthCoordinate, heightCoordinate);
             FieldUpdated?.Invoke(quoridorModel.Field);
             WallPlaced?.Invoke(quoridorModel.PreviousPlayer);

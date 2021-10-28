@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quoridor.Models", "Quoridor.Model\Quoridor.Models.csproj", "{7071411D-252E-4DC3-9EC3-1E5187D9CB31}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AStarPathfinding", "AStarPathfinding\AStarPathfinding.csproj", "{617C7512-70DB-46BF-B720-BA4FADB6D1F7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quoridor.Controllers", "Quoridor.Controllers\Quoridor.Controllers.csproj", "{9A3E975E-94E6-4A1F-BEE4-06A008D431B6}"
@@ -17,16 +15,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algorithms", "Algorithms", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quoridor.Console.App.PvP", "Quoridor.Console.App.PvP\Quoridor.Console.App.PvP.csproj", "{6AFC995C-CA71-4426-9E12-A8E31F68F863}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quoridor.Models", "Quoridor.Models\Quoridor.Models.csproj", "{99FD1EBB-B65E-4751-8564-E998BC93015E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7071411D-252E-4DC3-9EC3-1E5187D9CB31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7071411D-252E-4DC3-9EC3-1E5187D9CB31}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7071411D-252E-4DC3-9EC3-1E5187D9CB31}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7071411D-252E-4DC3-9EC3-1E5187D9CB31}.Release|Any CPU.Build.0 = Release|Any CPU
 		{617C7512-70DB-46BF-B720-BA4FADB6D1F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{617C7512-70DB-46BF-B720-BA4FADB6D1F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{617C7512-70DB-46BF-B720-BA4FADB6D1F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,16 +35,20 @@ Global
 		{6AFC995C-CA71-4426-9E12-A8E31F68F863}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AFC995C-CA71-4426-9E12-A8E31F68F863}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AFC995C-CA71-4426-9E12-A8E31F68F863}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99FD1EBB-B65E-4751-8564-E998BC93015E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99FD1EBB-B65E-4751-8564-E998BC93015E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99FD1EBB-B65E-4751-8564-E998BC93015E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99FD1EBB-B65E-4751-8564-E998BC93015E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7071411D-252E-4DC3-9EC3-1E5187D9CB31} = {5BBD27C7-C347-4267-935C-CF05873F27F5}
 		{617C7512-70DB-46BF-B720-BA4FADB6D1F7} = {59BAA5B0-734E-463E-96C9-EC0CDBA33FF0}
 		{9A3E975E-94E6-4A1F-BEE4-06A008D431B6} = {5BBD27C7-C347-4267-935C-CF05873F27F5}
 		{59BAA5B0-734E-463E-96C9-EC0CDBA33FF0} = {5BBD27C7-C347-4267-935C-CF05873F27F5}
 		{6AFC995C-CA71-4426-9E12-A8E31F68F863} = {17C6BCB0-0E59-42E2-8658-23961514C766}
+		{99FD1EBB-B65E-4751-8564-E998BC93015E} = {5BBD27C7-C347-4267-935C-CF05873F27F5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FE4564E8-238F-4138-AE9D-A5E7359777F8}

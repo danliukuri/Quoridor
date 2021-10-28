@@ -1,7 +1,7 @@
 ﻿using Quoridor.Console.App.PvP.Output;
 using Quoridor.Controllers;
-using Quoridor.ErrorHandling;
-using Quoridor.Models;
+using Quoridor.Models.General;
+using Quoridor.Models.General.Either;
 
 namespace Quoridor.Console.App.PvP.Input
 {

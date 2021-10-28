@@ -1,4 +1,4 @@
-﻿namespace Quoridor.Models
+﻿namespace Quoridor.Models.General
 {
     public class Neighbors<T> where T : class
     {

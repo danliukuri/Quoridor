@@ -1,5 +1,6 @@
-﻿using Quoridor.ErrorHandling;
-using Quoridor.Models;
+﻿using Quoridor.Models;
+using Quoridor.Models.General;
+using Quoridor.Models.General.Either;
 using System;
 
 namespace Quoridor.Controllers

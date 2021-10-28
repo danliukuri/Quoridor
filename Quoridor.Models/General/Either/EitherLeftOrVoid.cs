@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Quoridor.ErrorHandling
+namespace Quoridor.Models.General.Either
 {
     /// <summary>
     /// Functional data to represent a discriminated union of void and one possible type.
@@ -15,12 +15,12 @@ namespace Quoridor.ErrorHandling
 
         public EitherLeftOrVoid()
         {
-            this.isLeft = false;
+            isLeft = false;
         }
         public EitherLeftOrVoid(TL left)
         {
             this.left = left;
-            this.isLeft = true;
+            isLeft = true;
         }
 
         public T Match<T>(Func<TL, T> leftFunc)
@@ -30,9 +30,9 @@ namespace Quoridor.ErrorHandling
                 throw new ArgumentNullException(nameof(leftFunc));
             }
 
-            return this.isLeft ? leftFunc(this.left) : default;
+            return isLeft ? leftFunc(left) : default;
         }
-        public TL LeftOrDefault() => this.Match(l => l);
+        public TL LeftOrDefault() => Match(l => l);
 
         public static implicit operator EitherLeftOrVoid<TL>(TL left) => new EitherLeftOrVoid<TL>(left);
     }

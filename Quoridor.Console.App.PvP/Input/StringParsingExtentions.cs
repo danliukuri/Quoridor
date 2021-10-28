@@ -1,5 +1,5 @@
-﻿using Quoridor.ErrorHandling;
-using Quoridor.Models;
+﻿using Quoridor.Models.General;
+using Quoridor.Models.General.Either;
 
 namespace Quoridor.Console.App.PvP.Input
 {

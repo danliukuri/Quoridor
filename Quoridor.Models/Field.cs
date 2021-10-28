@@ -1,4 +1,5 @@
-﻿using Quoridor.Models.Interfaces;
+﻿using Quoridor.Models.General;
+using Quoridor.Models.Interfaces;
 using System;
 using System.Linq;
 

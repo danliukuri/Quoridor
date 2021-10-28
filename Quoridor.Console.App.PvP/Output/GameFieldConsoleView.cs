@@ -1,5 +1,6 @@
 ﻿using Quoridor.Controllers;
 using Quoridor.Models;
+using Quoridor.Models.General;
 using Quoridor.Models.Interfaces;
 using System;
 

@@ -1,6 +1,6 @@
 ﻿using Quoridor.Models;
-using System;
 using Quoridor.Models.Interfaces;
+using System;
 
 namespace Quoridor.Controllers
 {

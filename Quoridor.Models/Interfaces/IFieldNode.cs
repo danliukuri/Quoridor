@@ -1,4 +1,5 @@
 ﻿using AStarPathfinding;
+using Quoridor.Models.General;
 
 namespace Quoridor.Models.Interfaces
 {
