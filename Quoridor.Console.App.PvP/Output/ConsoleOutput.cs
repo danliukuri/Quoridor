@@ -1,4 +1,6 @@
 ﻿using Quoridor.Controllers;
+using Quoridor.Controllers.PlayerControllers;
+using Quoridor.Controllers.PlayerControllers.AI.Weak;
 using Quoridor.Models.Interfaces;
 
 namespace Quoridor.Console.App.PvP.Output

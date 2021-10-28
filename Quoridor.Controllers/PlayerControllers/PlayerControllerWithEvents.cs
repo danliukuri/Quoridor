@@ -3,7 +3,7 @@ using Quoridor.Models.General.Either;
 using Quoridor.Models.Interfaces;
 using System;
 
-namespace Quoridor.Controllers
+namespace Quoridor.Controllers.PlayerControllers
 {
     public class PlayerControllerWithEvents : PlayerController
     {

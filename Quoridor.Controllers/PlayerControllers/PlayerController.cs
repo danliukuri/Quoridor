@@ -6,7 +6,7 @@ using Quoridor.Models.Interfaces;
 using System;
 
 
-namespace Quoridor.Controllers
+namespace Quoridor.Controllers.PlayerControllers
 {
     public class PlayerController
     {
@@ -196,7 +196,7 @@ namespace Quoridor.Controllers
                     $"ward of the cell ({widthCoordinate + 1},{heightCoordinate + 1}) - there is already a wall there");
             }
 
-            Direction adjacentDirection = (direction == Direction.Up || direction == Direction.Down) ? Direction.Right : Direction.Down;
+            Direction adjacentDirection = direction == Direction.Up || direction == Direction.Down ? Direction.Right : Direction.Down;
             IFieldNode adjacentCell = cell.Neighbors.Get(adjacentDirection);
 
             // Check neighbors in neighborDirection from selected cell
@@ -287,7 +287,7 @@ namespace Quoridor.Controllers
                     $"ward of the cell ({cell.X + 1},{cell.Y + 1}) - there is no wall there");
             }
 
-            Direction adjacentDirection = (direction == Direction.Up || direction == Direction.Down) ? Direction.Right : Direction.Down;
+            Direction adjacentDirection = direction == Direction.Up || direction == Direction.Down ? Direction.Right : Direction.Down;
             IFieldNode adjacentCell = cell.Neighbors.Get(adjacentDirection);
 
             if (adjacentCell is null)

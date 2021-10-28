@@ -1,5 +1,7 @@
 ﻿using Quoridor.Console.App.PvP.Output;
 using Quoridor.Controllers;
+using Quoridor.Controllers.PlayerControllers;
+using Quoridor.Controllers.PlayerControllers.AI.Weak;
 using Quoridor.Models.General;
 using Quoridor.Models.General.Either;
 

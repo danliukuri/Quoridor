@@ -1,7 +1,7 @@
 ﻿using Quoridor.Models.Interfaces;
 using System;
 
-namespace Quoridor.Controllers
+namespace Quoridor.Controllers.PlayerControllers.AI.Weak
 {
     public class WeakAIControllerWithEvents : WeakAIController
     {

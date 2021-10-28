@@ -3,7 +3,7 @@ using Quoridor.Models.General;
 using Quoridor.Models.General.Either;
 using System;
 
-namespace Quoridor.Controllers
+namespace Quoridor.Controllers.PlayerControllers.AI.Weak
 {
     public class WeakAIController
     {
