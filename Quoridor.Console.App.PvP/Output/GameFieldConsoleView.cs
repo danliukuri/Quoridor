@@ -3,7 +3,7 @@ using Quoridor.Models;
 using Quoridor.Models.Interfaces;
 using System;
 
-namespace Quoridor.Console.App
+namespace Quoridor.Console.App.PvP.Output
 {
     class GameFieldConsoleView
     {
@@ -122,7 +122,7 @@ namespace Quoridor.Console.App
                 bordersPlaceholder = verticalWall;
                 verticalWallСonnectionСounters[j]++;
             }
-            else if (i % 2 == 0 && i / 2 - 1 >= 0 && i / 2  < field.Height &&
+            else if (i % 2 == 0 && i / 2 - 1 >= 0 && i / 2 < field.Height &&
                 field.GetCell(j, i / 2).Walls.Get(Direction.Right) != null)
             {
                 if (verticalWallСonnectionСounters[j] % wallDimension != 0)

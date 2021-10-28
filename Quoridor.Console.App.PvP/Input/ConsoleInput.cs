@@ -1,8 +1,9 @@
-﻿using Quoridor.Controllers;
+﻿using Quoridor.Console.App.PvP.Output;
+using Quoridor.Controllers;
 using Quoridor.ErrorHandling;
 using Quoridor.Models;
 
-namespace Quoridor.Console.App
+namespace Quoridor.Console.App.PvP.Input
 {
     class ConsoleInput
     {
@@ -51,8 +52,8 @@ namespace Quoridor.Console.App
             {
                 EitherLeftOrRight<ValidationError, bool> result =
                     HandlePlayerTurn(quoridorController, playerController);
-                if(result.IsLeft)
-                     ConsoleOutputForInput.Exception(result.LeftOrDefault().Message);
+                if (result.IsLeft)
+                    ConsoleOutputForInput.Exception(result.LeftOrDefault().Message);
             }
         }
 
@@ -64,7 +65,7 @@ namespace Quoridor.Console.App
 
             bool isPlayerTurn = true;
             while (!quoridorController.QuoridorModel.IsGameEnded)
-            { 
+            {
                 if (isPlayerTurn)
                 {
                     EitherLeftOrRight<ValidationError, bool> result =

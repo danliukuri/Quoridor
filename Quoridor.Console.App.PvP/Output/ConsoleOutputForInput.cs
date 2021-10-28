@@ -1,6 +1,6 @@
 ﻿using Quoridor.Models.Interfaces;
 
-namespace Quoridor.Console.App
+namespace Quoridor.Console.App.PvP.Output
 {
     class ConsoleOutputForInput
     {

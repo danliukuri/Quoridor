@@ -1,7 +1,7 @@
 ﻿using Quoridor.Controllers;
 using Quoridor.Models.Interfaces;
 
-namespace Quoridor.Console.App
+namespace Quoridor.Console.App.PvP.Output
 {
     class ConsoleOutput
     {
@@ -48,7 +48,7 @@ namespace Quoridor.Console.App
         }
         void WallPlaced(IPlayer player)
         {
-            if(player.NumberOfWalls > 0)
+            if (player.NumberOfWalls > 0)
                 System.Console.WriteLine($"{player.Name}, you have {player.NumberOfWalls} walls left\n");
             else
                 System.Console.WriteLine($"{player.Name}, you have no walls left, now all you need to do is reach the finish line\n");

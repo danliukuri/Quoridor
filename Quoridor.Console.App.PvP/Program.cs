@@ -1,7 +1,9 @@
-﻿using Quoridor.Controllers;
+﻿using Quoridor.Console.App.PvP.Input;
+using Quoridor.Console.App.PvP.Output;
+using Quoridor.Controllers;
 using Quoridor.Models;
 
-namespace Quoridor.Console.App
+namespace Quoridor.Console.App.PvP
 {
     class Program
     {
@@ -28,7 +30,7 @@ namespace Quoridor.Console.App
 
             // PvAI
             QuoridorControllerWithEvents quoridorPvAIController;
-            { 
+            {
                 Field field = new Field();
                 Player[] players = new Player[]
                 {

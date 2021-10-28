@@ -1,7 +1,7 @@
 ﻿using Quoridor.ErrorHandling;
 using Quoridor.Models;
 
-namespace Quoridor.Console.App
+namespace Quoridor.Console.App.PvP.Input
 {
     static class StringParsingExtentions
     {
