@@ -38,6 +38,7 @@ namespace Quoridor.Controllers.PlayerControllers.AI.Strong.MinimaxAdapters
             IFieldNode[] currentPlayerNeighbors = currentPLayerPosition.Neighbors.GetAll();
             
             moves.AddPossibleWalks(players, currentPLayerPosition, currentPlayerNeighbors);
+            moves.AddPossibleJumps(players, currentPLayerPosition, currentPlayerNeighbors);
 
             return moves;
         }
