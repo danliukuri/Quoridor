@@ -76,23 +76,25 @@ namespace Quoridor.Controllers.PlayerControllers.AI.Strong.MinimaxAdapters
             // Undo is to reverse the previous turn
             if (move.IsWalk)
             {
-                playerController.TryToMakePlayerMove(
-                    DirectionExtentions.GetTheOppositeDirection(move.GetWalkParameters()));
+                Direction oppositeDirection = DirectionExtentions.GetTheOppositeDirection(move.GetWalkParameters()); ;
+                quoridorModel.CurrentPlayer.Position = quoridorModel.CurrentPlayer.Position.
+                    Neighbors.Get(oppositeDirection);
             }
             else if (move.IsJump)
             {
                 EitherLeftOrRight<Direction, (Direction, Direction)> jump = move.GetJumpParameters();
                 if (jump.IsLeft)
                 {
-                    playerController.TryToMakePlayerMove(
-                        DirectionExtentions.GetTheOppositeDirection(jump.LeftOrDefault()));
+                    Direction oppositeDirection = DirectionExtentions.GetTheOppositeDirection(jump.LeftOrDefault()); ;
+                    quoridorModel.CurrentPlayer.Position = quoridorModel.CurrentPlayer.Position.Neighbors.
+                        Get(oppositeDirection).Neighbors.Get(oppositeDirection);
                 }
                 else
                 {
                     (Direction directionFromThisPlayer, Direction directionFromAnotherPlayer) = jump.RightOrDefault();
-                    playerController.TryToMakePlayerMove(
-                        DirectionExtentions.GetTheOppositeDirection(directionFromAnotherPlayer),
-                        DirectionExtentions.GetTheOppositeDirection(directionFromThisPlayer));
+                    quoridorModel.CurrentPlayer.Position = quoridorModel.CurrentPlayer.Position.Neighbors.
+                        Get(DirectionExtentions.GetTheOppositeDirection(directionFromAnotherPlayer)).Neighbors.
+                        Get(DirectionExtentions.GetTheOppositeDirection(directionFromThisPlayer));
                 }
             }
             else if (move.IsWallPlace)
@@ -100,9 +102,6 @@ namespace Quoridor.Controllers.PlayerControllers.AI.Strong.MinimaxAdapters
                 playerController.TryToRemoveWall(move.GetWallPlaceParameters().Item2,
                     move.GetWallPlaceParameters().Item1);
             }
-            // Make previous player turn
-            for (int i = 0; i < quoridorModel.Players.Length - 1; i++)
-                quoridorModel.SwitchPlayer();
         }
     }
 }

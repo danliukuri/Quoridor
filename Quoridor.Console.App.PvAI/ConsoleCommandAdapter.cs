@@ -108,21 +108,23 @@ namespace Quoridor.Console.App.PvAI
         {
             IFieldNode playerPosition = quoridorController.QuoridorModel.CurrentPlayer.Position;
 
-            IFieldNode filedNodeWhereWeJump;
+            IFieldNode fieldNodeWhereWeJump;
             if (jumpParameters.IsLeft)
             {
-                filedNodeWhereWeJump = playerPosition.Neighbors.Get(jumpParameters.LeftOrDefault());
+                Direction direction = jumpParameters.LeftOrDefault();
+                IFieldNode adjacentPlayerCell = playerPosition.Neighbors.Get(direction);
+                fieldNodeWhereWeJump = adjacentPlayerCell.Neighbors.Get(direction);
             }
             else
             {
                 (Direction directionFromThisPlayer, Direction directionFromAnotherPlayer) =
                     jumpParameters.RightOrDefault();
 
-                IFieldNode fieldNode = playerPosition.Neighbors.Get(directionFromThisPlayer);
-                filedNodeWhereWeJump = fieldNode.Neighbors.Get(directionFromAnotherPlayer);
+                IFieldNode adjacentPlayerCell = playerPosition.Neighbors.Get(directionFromThisPlayer);
+                fieldNodeWhereWeJump = adjacentPlayerCell.Neighbors.Get(directionFromAnotherPlayer);
             }
-            char w = (char)(filedNodeWhereWeJump.X + 'A');
-            int h = filedNodeWhereWeJump.Y + 1;
+            char w = (char)(fieldNodeWhereWeJump.X + 'A');
+            int h = fieldNodeWhereWeJump.Y + 1;
             return new string[] { "jump", w.ToString(), h.ToString() };
         }
         public string[] GetWallPlaceCommand(Direction direction, FieldNode fieldNode)
