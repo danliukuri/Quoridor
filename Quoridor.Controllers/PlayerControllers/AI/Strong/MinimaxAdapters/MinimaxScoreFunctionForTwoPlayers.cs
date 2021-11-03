@@ -1,4 +1,6 @@
-﻿using Quoridor.Models;
+﻿using AStarPathfinding;
+using Quoridor.Models;
+using Quoridor.Models.Interfaces;
 using System;
 
 namespace Quoridor.Controllers.PlayerControllers.AI.Strong.MinimaxAdapters
@@ -29,14 +31,31 @@ namespace Quoridor.Controllers.PlayerControllers.AI.Strong.MinimaxAdapters
 
             if (player == firstPlayer)
             {
-                // Value inversely proportional to the number of steps to victory
-                score = (double)(quoridorModel.Field.Height - 1) / firstPlayer.Goal.Item2(firstPlayer.Position);
+                score = CalculateForPlayer(firstPlayer, quoridorModel);
             }
             else
             {
-                score = (double)(quoridorModel.Field.Height - 1) / secondPlayer.Goal.Item2(secondPlayer.Position);
+                score = CalculateForPlayer(secondPlayer, quoridorModel);
             }
             return score;
+        }
+
+        static double CalculateForPlayer(Player player, QuoridorModel quoridorModel)
+        {
+            IFieldNode finded = AStar.FindTheShortestPath(quoridorModel.Field, player.Position,
+                           player.Goal.Item2, player.Goal.Item1);
+            int stepsToVictory = 0;
+            if (finded != null)
+            {
+                IPathNode fieldNode = finded;
+                while (fieldNode.PreviousPathNode != null)
+                {
+                    stepsToVictory++;
+                    fieldNode = fieldNode.PreviousPathNode;
+                }
+            }
+            // Value inversely proportional to the number of steps to victory
+            return (double)(quoridorModel.Field.Height - 1) / stepsToVictory;
         }
     }
 }
