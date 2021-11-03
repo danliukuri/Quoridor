@@ -60,6 +60,12 @@ namespace Quoridor.Models
             CreateNodes();
             ConnectNodes();
         }
+        public void ResetPreviousPathNodes()
+        {
+            for (int i = 0; i < Width; i++)
+                for (int j = 0; j < Height; j++)
+                    cells[i, j].PreviousPathNode = default;
+        }
 
         public IFieldNode[] GetWalkableAdjacentNodes(IFieldNode current) =>
             current.Neighbors.GetAll().Where(adjacentNode => current.IsItPossibleMoveTo(adjacentNode)).ToArray();

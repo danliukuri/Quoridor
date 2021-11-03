@@ -28,6 +28,7 @@ namespace AStarPathfinding
             {
                 throw new ArgumentNullException(nameof(goal));
             }
+            graph.ResetPreviousPathNodes();
 
             T current = default;
             List<T> openList = new List<T>();
