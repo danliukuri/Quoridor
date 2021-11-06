@@ -1,4 +1,6 @@
-﻿using Quoridor.Models.General;
+﻿using Quoridor.Controllers.PlayerControllers;
+using Quoridor.Models;
+using Quoridor.Models.General;
 using Quoridor.Models.General.Either;
 using Quoridor.Models.Interfaces;
 using System.Collections.Generic;
@@ -77,6 +79,48 @@ namespace Quoridor.Controllers.UtilityModels
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Search and add possible moves to place wall
+        /// </summary>
+        public static void AddPossibleMovesToPlaceWall(this List<Move> moves, IField field,
+            PlayerController playerController, QuoridorModel quoridorModel)
+        {
+            // Wall can be vertical or horizontal
+            Direction[] directions = new Direction[] { Direction.Right, Direction.Down };
+            for (int i = 0; i < field.Width - 1; i++)
+                for (int j = 0; j < field.Height - 1; j++)
+                {
+                    IFieldNode fieldNode = field.GetCell(i, j);
+
+                    for (int k = 0; k < directions.Length; k++)
+                    {
+                        Direction direction = directions[k];
+                        bool canPlaceWall = true;
+
+                        // We need to place wall to check if all players can reach the goal
+                        EitherLeftOrVoid<ValidationError> result =
+                            playerController.TryToPlaceWall(direction, i, j);
+                        if (result.IsLeft)
+                            canPlaceWall = false;
+                        else
+                        {
+                            // If we placed wall we need undo this move
+
+                            playerController.TryToRemoveWall(fieldNode, direction);
+
+                            // Make previous player turn
+                            for (int l = 0; l < quoridorModel.Players.Length - 1; l++)
+                                quoridorModel.SwitchPlayer();
+                            
+                            quoridorModel.CurrentPlayer.NumberOfWalls++;
+                        }
+
+                        if (canPlaceWall)
+                            moves.Add(new Move(direction, (FieldNode)fieldNode));
+                    }
+                }
         }
     }
 }

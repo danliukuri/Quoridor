@@ -36,10 +36,12 @@ namespace Quoridor.Controllers.PlayerControllers.AI.Strong.MinimaxAdapters
             IPlayer[] players = quoridorModel.Players;
             IFieldNode currentPLayerPosition = quoridorModel.CurrentPlayer.Position;
             IFieldNode[] currentPlayerNeighbors = currentPLayerPosition.Neighbors.GetAll();
-            
-            moves.AddPossibleWalks(players, currentPLayerPosition, currentPlayerNeighbors);
-            moves.AddPossibleJumps(players, currentPLayerPosition, currentPlayerNeighbors);
 
+            if (quoridorModel.CurrentPlayer.NumberOfWalls > 0)
+                moves.AddPossibleMovesToPlaceWall(quoridorModel.Field, playerController, quoridorModel);
+            moves.AddPossibleJumps(players, currentPLayerPosition, currentPlayerNeighbors);
+            moves.AddPossibleWalks(players, currentPLayerPosition, currentPlayerNeighbors);
+            
             return moves;
         }
 
@@ -101,6 +103,7 @@ namespace Quoridor.Controllers.PlayerControllers.AI.Strong.MinimaxAdapters
             {
                 playerController.TryToRemoveWall(move.GetWallPlaceParameters().Item2,
                     move.GetWallPlaceParameters().Item1);
+                quoridorModel.CurrentPlayer.NumberOfWalls++;
             }
         }
     }
