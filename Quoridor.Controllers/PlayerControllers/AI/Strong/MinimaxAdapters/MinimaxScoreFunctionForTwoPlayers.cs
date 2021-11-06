@@ -7,7 +7,7 @@ namespace Quoridor.Controllers.PlayerControllers.AI.Strong.MinimaxAdapters
 {
     public static class MinimaxScoreFunction
     {
-        public static double CalculateForTwoPlayers(MinimaxStateAdapter minimaxAdapter, Player player)
+        public static double CalculateForTwoPlayers(MinimaxStateAdapter minimaxAdapter, IPlayer player)
         {
             if (minimaxAdapter is null)
             {
@@ -25,22 +25,30 @@ namespace Quoridor.Controllers.PlayerControllers.AI.Strong.MinimaxAdapters
                     " Parameter name: " + nameof(quoridorModel.Players));
             }
 
-            Player firstPlayer = (Player)quoridorModel.Players[0];
-            Player secondPlayer = (Player)quoridorModel.Players[1];
-            double score; // A number that shows how close the player is to victory
+            IPlayer firstPlayer = quoridorModel.Players[0];
+            IPlayer secondPlayer = quoridorModel.Players[1];
+            IPlayer opponent = player == firstPlayer ? secondPlayer : firstPlayer;
 
-            if (player == firstPlayer)
-            {
-                score = CalculateForPlayer(firstPlayer, quoridorModel);
-            }
-            else
-            {
-                score = CalculateForPlayer(secondPlayer, quoridorModel);
-            }
+            return CalculateForPlayer(player, opponent, quoridorModel);
+        }
+        static double CalculateForPlayer(IPlayer player, IPlayer opponent, QuoridorModel quoridorModel)
+        {
+            // Maximum number of steps to win in a straight line
+            int maxStepsToVictory = quoridorModel.Field.Height - 1;
+
+            // A number that shows how close the player is to victory
+            double score = maxStepsToVictory / CalculateStepsToVictoryForPlayer(player, quoridorModel);
+
+            double opponentStepsToVictory = CalculateStepsToVictoryForPlayer(opponent, quoridorModel);
+
+            if (opponentStepsToVictory < 2)
+                score -= maxStepsToVictory / opponentStepsToVictory;
+            else if (opponentStepsToVictory < 4)
+                score -= maxStepsToVictory / opponentStepsToVictory / 2;
+
             return score;
         }
-
-        static double CalculateForPlayer(Player player, QuoridorModel quoridorModel)
+        static double CalculateStepsToVictoryForPlayer(IPlayer player, QuoridorModel quoridorModel)
         {
             IFieldNode finded = AStar.FindTheShortestPath(quoridorModel.Field, player.Position,
                            player.Goal.Item2, player.Goal.Item1);
@@ -54,8 +62,7 @@ namespace Quoridor.Controllers.PlayerControllers.AI.Strong.MinimaxAdapters
                     fieldNode = fieldNode.PreviousPathNode;
                 }
             }
-            // Value inversely proportional to the number of steps to victory
-            return (double)(quoridorModel.Field.Height - 1) / stepsToVictory;
+            return stepsToVictory;
         }
     }
 }
